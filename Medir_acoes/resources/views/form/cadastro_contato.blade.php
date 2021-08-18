@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Balanço</title>
+	<title>Cadastro Contato</title>
 
 
 <link rel="stylesheet"
@@ -16,7 +16,8 @@ crossorigin="anonymous">
 </script>
 
 <script
-src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 crossorigin="anonymous">
 </script>
 
@@ -48,26 +49,26 @@ header
 	<header>
 		
 		<form
-		action="Cadastrar Balanço"
+		action="Cadastrar Contato"
 		method="POST">
 			
 		@csrf
 
-
 			<div class="form-group">
-				<label for="I_valor_prev">Valor Previsto</label>
+				<label for="I_DDD">DDD contato</label>
 				<input type="text"
 				class="form-control"
-				id="I_valor_prev"
-				name="T_valor_prev">	
+				id="I_DDD"
+				name="T_DDD">	
 			</div>
 
+
 			<div class="form-group">
-				<label for="I_analista">Numero de Analistas</label>
+				<label for="I_numero">Numero</label>
 				<input type="text"
 				class="form-control"
-				id="I_analista"
-				name="T_analista">	
+				id="I_numero"
+				name="T_numero">	
 			</div>
 
 
@@ -75,14 +76,14 @@ header
 				
 
 			<select class="custom-select"
-			name="T_acao">
+			name="T_empresa">
 
 
-			    <option selected>Ação / Empresa</option>
-			    @foreach($acao as $exibir_acao)
+			    <option selected>Empresa</option>
+			    @foreach($html_empresa as $exibir_empresa)
 
-			    <option value="{{$exibir_acao['id_acao']}}">
-			    	{{$exibir_acao['simbolo_acao']}} / {{$exibir_acao['nome_empresa']}}
+			    <option value="{{$exibir_empresa['id_empresa']}}">
+			    	{{$exibir_empresa['nome_empresa']}}
 			    </option>
 
 			    @endforeach

@@ -76,10 +76,34 @@ class Empresa
 	// INICIO SELECT
 	//====================================
 
+
+		function consultar_empresa_id(&$con, &$id_empresa)
+		{
+			$sql_empresa="SELECT
+			id_empresa,
+			simbolo_empresa, nome_empresa,
+			CEO,
+			URL
+			FROM empresa
+			WHERE id_empresa=:id_empresa";
+
+			$empresa=$con->prepare($sql_empresa);
+
+			$empresa->bindParam(':id_empresa', $id_empresa);
+
+			$empresa->execute();
+
+			$consultar_empresa=$empresa->fetchAll();
+
+			return $consultar_empresa;
+		}/// fim function consultar_empresa(&$con)
+
+
 		function consultar_form_empresa(&$con)
 		{
 			$sql_empresa="
-			SELECT id_empresa, nome_empresa
+			SELECT id_empresa, nome_empresa,
+			simbolo_empresa
 			FROM empresa
 			ORDER BY nome_empresa";
 
@@ -91,6 +115,7 @@ class Empresa
 
 			return $consultar_empresa;
 		}/// function consultar_form_empresa(&$con)
+
 	//====================================
 	// FIM SELECT
 	//====================================
@@ -183,22 +208,23 @@ class Acao
 	// INICIO SELECT
 	//====================================
 
-		function return_valor_atual(&$con, &$id_acao)
+		function return_valor_atual(&$con)
 		{
 			$sql_acao="
-			SELECT valor_atual
+			SELECT id_empresa,
+			valor_atual, simbolo_acao
 			FROM acao
-			WHERE id_acao=:id_acao";
+			WHERE simbolo_acao=:simbolo_acao";
 
-			$id_acao=$_POST['id_acao'];
+			$simbolo_acao=$_GET['T_simbolo'];
 
 			$acao=$con->prepare($sql_acao);
 
-			$acao->bindParam(':id_acao', $id_acao);
+			$acao->bindParam(':simbolo_acao', $simbolo_acao);
 
 			$acao->execute();
 
-			$valor_atual=$acao->fetchcolumn();
+			$valor_atual=$acao->fetchAll();
 
 			return $valor_atual;
 
@@ -213,7 +239,7 @@ class Acao
 			simbolo_acao, nome_empresa
 			FROM acao
 			INNER JOIN empresa ON empresa.id_empresa=acao.id_empresa
-			ORDER BY simbolo_acao";
+			ORDER BY nome_empresa, simbolo_acao";
 
 			$acao=$con->prepare($sql_acao);
 
@@ -223,6 +249,27 @@ class Acao
 
 			return $consultar_acao;
 		}/// fim function return_valor_atual(&$con, &$id_acao)
+
+
+
+		function consultar_acao_empresa(&$con, &$id_empresa)
+		{
+			$sql_acao="
+			SELECT
+			simbolo_acao, valor_atual
+			FROM acao
+			WHERE id_empresa=:id_empresa";
+
+			$acao=$con->prepare($sql_acao);
+
+			$acao->bindParam(':id_empresa', $id_empresa);
+
+			$acao->execute();
+
+			$consultar_acao=$acao->fetchAll();
+
+			return $consultar_acao;
+		}/// fim function consultar_acao_empresa(&$con)
 
 	//====================================
 	// FIM SELECT
@@ -255,6 +302,199 @@ class Acao
 	// FIM UPDATE
 	//====================================
 }/// fim class Acao
+
+
+class Contato
+{
+
+
+
+	//====================================
+	// INICIO INSERT
+	//====================================
+
+		function cadastro_contato(&$con)
+		{
+			$sql_contato="
+			INSERT INTO telefone
+			(id_empresa,
+			DDD_telefone,
+			numero_telefone)
+			VALUES
+			(:id_empresa,
+			:DDD_telefone,
+			:numero_telefone)";
+
+
+			$id_empresa=$_POST['T_empresa'];
+
+			$DDD_telefone=$_POST['T_DDD'];
+
+			$numero_telefone=$_POST['T_numero'];
+
+			$contato=$con->prepare($sql_contato);
+
+			$contato->bindParam(':id_empresa', $id_empresa);
+
+			$contato->bindParam(':DDD_telefone', $DDD_telefone);
+
+			$contato->bindParam(':numero_telefone', $numero_telefone);
+
+			$contato->execute();
+
+		}/// fim function cadastro_contato(&$con)
+
+	//====================================
+	// FIM INSERT
+	//====================================
+
+
+	//====================================
+	// INICIO SELECT
+	//====================================
+
+		function consultar_contato_empresa(&$con, &$id_empresa)
+		{
+			$sql_contato="
+			SELECT numero_telefone, DDD_telefone
+			FROM telefone
+			WHERE id_empresa=:id_empresa";
+
+
+			$contato=$con->prepare($sql_contato);
+
+			$contato->bindParam(':id_empresa', $id_empresa);
+
+			$contato->execute();
+
+			$consultar_contato=$contato->fetchAll();
+
+			return $consultar_contato;
+		}/// fim function consultar_contato(&$con, &$id_empresa)
+
+
+
+	//====================================
+	// FIM SELECT
+	//====================================
+
+}/// fim class contato
+
+
+class Endereco
+{
+
+	//====================================
+	// INICIO INSERT
+	//====================================
+
+		function cadastro_endereco(&$con)
+		{
+			$sql_endereco="
+			INSERT INTO endereco
+			(id_empresa,
+			nome_rua,
+			numero_rua,
+			CEP,
+			bairro,
+			cidade,
+			estado,
+			pais)
+			VALUES
+			(:id_empresa,
+			:nome_rua,
+			:numero_rua,
+			:CEP,
+			:bairro,
+			:cidade,
+			:estado,
+			:pais
+			)";
+
+			$id_empresa=$_POST['T_empresa'];
+
+			$nome_rua=$_POST['T_nome'];
+
+			$numero_rua=$_POST['T_numero'];
+
+			$CEP=$_POST['T_CEP'];
+
+			$bairro=$_POST['T_bairro'];
+
+			$cidade=$_POST['T_cidade'];
+
+			$estado=$_POST['T_estado'];
+
+			$pais="Brasil";
+
+
+			$endereco=$con->prepare($sql_endereco);
+
+			$endereco->bindParam(':id_empresa', $id_empresa);
+
+			$endereco->bindParam(':nome_rua', $nome_rua);
+
+			$endereco->bindParam(':numero_rua', $numero_rua);
+
+			$endereco->bindParam(':CEP', $CEP);
+
+			$endereco->bindParam(':bairro', $bairro);
+
+			$endereco->bindParam(':cidade', $cidade);
+
+			$endereco->bindParam(':estado', $estado);
+
+			$endereco->bindParam(':pais', $pais);
+
+			$endereco->execute();
+		}/// fim function cadastro_endereco(&$con)
+
+
+	//====================================
+	// FIM INSERT
+	//====================================
+
+
+
+
+
+	//====================================
+	// INICIO SELECT
+	//====================================
+
+		function consultar_endereco_empresa(&$con, &$id_empresa)
+		{
+
+			$sql_endereco="
+			SELECT
+			nome_rua,
+			numero_rua,
+			CEP,
+			bairro,
+			cidade,
+			estado,
+			pais
+			FROM endereco
+			WHERE id_empresa=:id_empresa
+			";
+
+			$endereco=$con->prepare($sql_endereco);
+
+			$endereco->bindParam(':id_empresa', $id_empresa);
+
+			$endereco->execute();
+
+			$consultar_endereco=$endereco->fetchAll();
+
+			return $consultar_endereco;
+			
+		}//// fim function consultar_endereco_empresa(&$con, &$id_empresa)
+
+	//====================================
+	// FIM SELECT
+	//====================================
+
+}/// fim class Endereco
 
 
 ?>

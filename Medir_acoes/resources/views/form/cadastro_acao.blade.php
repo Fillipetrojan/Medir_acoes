@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cadastro Empresa</title>
+	<title>Cadastro Ação</title>
 
 
 <link rel="stylesheet"
@@ -64,7 +64,9 @@ header
 
 			<div class="form-group">
 				<label for="I_valor">Valor</label>
-				<input type="text"
+				<input type="number"
+				min="0"
+				step="0.01" 
 				class="form-control"
 				id="I_valor"
 				name="T_valor">	
